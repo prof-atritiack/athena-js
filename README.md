@@ -9,12 +9,21 @@ Sistema de detecção de pessoas usando OpenCV e Python, desenvolvido para funci
 
 ## Instalação
 
-### Opção 1: Setup Automático (Windows)
+> **Início Rápido:** Para começar em 5 minutos, veja [QUICKSTART.md](QUICKSTART.md)  
+> **Guia Completo:** Para instruções detalhadas passo a passo, consulte [INSTALACAO.md](INSTALACAO.md)
 
-Execute o script de configuração que cria o ambiente virtual e instala as dependências automaticamente:
+### Opção 1: Setup Automático (Recomendado)
 
+**Windows:**
 ```bash
 setup.bat
+```
+
+**Linux/Mac ou Cross-platform:**
+```bash
+python setup.py
+# ou
+python3 setup.py
 ```
 
 ### Opção 2: Setup Manual
