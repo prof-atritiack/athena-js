@@ -199,3 +199,44 @@ Estes scripts são exemplos básicos para começar. Para produção, considere:
 - Calibrar a câmera para medidas precisas
 - Otimizar para o hardware específico
 
+## Referências
+
+### Bibliotecas e Ferramentas
+
+- **OpenCV**: Biblioteca de visão computacional utilizada para detecção e processamento de imagens
+  - Documentação: https://opencv.org/
+  - GitHub: https://github.com/opencv/opencv
+  - Transformada de Hough para círculos: cv2.HoughCircles
+  - Detector HOG para pessoas: cv2.HOGDescriptor
+
+- **Python**: Linguagem de programação utilizada
+  - Versão: Python 3.7 ou superior
+  - Site oficial: https://www.python.org/
+
+- **NumPy**: Biblioteca para cálculos numéricos
+  - Utilizada para operações com arrays e manipulação de dados de imagem
+
+### Desenvolvimento
+
+Este projeto foi desenvolvido com auxílio de:
+
+- **Cursor AI**: Editor de código com suporte a inteligência artificial
+  - Website: https://cursor.sh/
+  - Utilizado para desenvolvimento, geração de código e assistência durante a implementação
+
+- **Modelo de IA**: Claude (Anthropic)
+  - Utilizado através do Cursor AI para assistência no desenvolvimento
+  - Referência: https://www.anthropic.com/
+
+### Algoritmos Utilizados
+
+- **Histogram of Oriented Gradients (HOG)**: Método para detecção de objetos, especialmente eficiente para detecção de pedestres
+  - Dalal, N., & Triggs, B. (2005). Histograms of oriented gradients for human detection. CVPR.
+
+- **Transformada de Hough para Círculos**: Método para detecção de formas circulares em imagens
+  - Duda, R. O., & Hart, P. E. (1972). Use of the Hough transformation to detect lines and curves in pictures. Communications of the ACM.
+
+### Licença
+
+Este projeto é fornecido como está, sem garantias. Sinta-se livre para usar e modificar conforme necessário.
+
