@@ -68,6 +68,23 @@ class DetectorCirculoCentro:
         return (abs(x - centro_x) < zona_largura / 2 and 
                 abs(y - centro_y) < zona_altura / 2)
     
+    def esta_pronto_para_medir(self, circulo_central, min_radius, max_radius, largura, altura):
+        """Verifica se o círculo está pronto para medir (dentro da área e tamanho válido)"""
+        if circulo_central is None:
+            return False
+        
+        x, y, r = circulo_central
+        
+        # Verifica se está na zona central
+        if not self.esta_na_zona_central(x, y, largura, altura):
+            return False
+        
+        # Verifica se o raio está dentro dos limites permitidos
+        if r < min_radius or r > max_radius:
+            return False
+        
+        return True
+    
     def detectar_circulo_central(self, frame):
         """Detecta círculos apenas na zona central"""
         altura, largura = frame.shape[:2]
@@ -107,7 +124,7 @@ class DetectorCirculoCentro:
         
         return circulo_central, min_radius, max_radius
     
-    def desenhar_interface(self, frame, circulo_central, min_radius, max_radius):
+    def desenhar_interface(self, frame, circulo_central, min_radius, max_radius, pronto_para_medir):
         """Desenha interface com orientações e marcações"""
         altura, largura = frame.shape[:2]
         centro_x = largura // 2
@@ -135,8 +152,8 @@ class DetectorCirculoCentro:
         cv2.line(frame, (0, centro_y), (largura, centro_y), (255, 255, 0), 1)
         cv2.circle(frame, (centro_x, centro_y), 3, (255, 255, 0), -1)
         
-        # Se há círculo detectado, desenha
-        if circulo_central:
+        # Só desenha o círculo se estiver pronto para medir
+        if circulo_central and pronto_para_medir:
             x, y, r = circulo_central
             # Círculo detectado (verde)
             cv2.circle(frame, (x, y), r, (0, 255, 0), 3)
@@ -187,9 +204,12 @@ class DetectorCirculoCentro:
             y_offset += 35
         
         # Status de detecção
-        if circulo_central:
+        if pronto_para_medir:
             status = "CIRCULO DETECTADO - Pronto para medir!"
             cor_status = (0, 255, 0)
+        elif circulo_central:
+            status = "Circulo detectado mas fora da area ou tamanho invalido"
+            cor_status = (0, 165, 255)
         else:
             status = "Aguardando circulo no centro..."
             cor_status = (0, 165, 255)
@@ -247,8 +267,12 @@ class DetectorCirculoCentro:
                 # Detecta círculo central
                 circulo_central, min_radius, max_radius = self.detectar_circulo_central(frame)
                 
+                # Verifica se está pronto para medir
+                altura, largura = frame.shape[:2]
+                pronto_para_medir = self.esta_pronto_para_medir(circulo_central, min_radius, max_radius, largura, altura)
+                
                 # Desenha interface
-                self.desenhar_interface(frame, circulo_central, min_radius, max_radius)
+                self.desenhar_interface(frame, circulo_central, min_radius, max_radius, pronto_para_medir)
                 
                 # Calcula FPS
                 tempo_atual = cv2.getTickCount()
@@ -272,10 +296,12 @@ class DetectorCirculoCentro:
                 if key == ord('q') or key == ord('Q'):
                     break
                 elif key == ord('m') or key == ord('M'):
-                    if circulo_central:
-                        largura = frame.shape[1]
+                    largura = frame.shape[1]
+                    if pronto_para_medir:
                         if self.realizar_medicao(circulo_central, largura):
                             print(f"\n>>> MEDICAO REALIZADA: Diametro = {self.diametro_detectado:.2f} cm <<<")
+                    elif circulo_central:
+                        print("ERRO: Circulo detectado mas nao esta pronto para medir (fora da area ou tamanho invalido).")
                     else:
                         print("ERRO: Nenhum circulo detectado no centro. Posicione a cabeca corretamente.")
                 elif key == ord('+') or key == ord('='):
